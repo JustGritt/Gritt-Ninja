@@ -114,11 +114,13 @@ export function createFruit() {
 		fruit.vel.y -= k.dt() * 100
 	}
 
-    fruit.onGround(() => {
-        k.wait(0.5, () => {
-            fruit.destroy()
-        })
+    fruit.onHoverUpdate(() => {
+        console.log("hover")
+
+        fruit.destroy()
     })
+
+
 
     return fruit;
 }
