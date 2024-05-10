@@ -4,7 +4,7 @@ import { k } from "../kaboomContext";
 // Variables
 // ==============================
 
-const turtle = await k.loadSprite("turtle", "/sprites/turtle.png")
+k.loadSprite("fruit", "./sprites/turtle.png");
 
 // ==============================
 // Functions
@@ -24,7 +24,7 @@ function randomSize() {
 
 export function createFruit() {
     const fruit = k.add([
-        k.sprite(turtle),
+        k.sprite("fruit"),
         k.scale(randomSize() / 24),
         k.pos(randomPosition(), k.height() - 48),
         k.anchor("center"),
