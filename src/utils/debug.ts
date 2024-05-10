@@ -13,9 +13,23 @@ export function mousePosition(y: number) {
     })
 }
 
+export function numberOfEntities(y: number) {
+    k.add([
+        k.text("Number of entities: " + k.get("fruit").length.toString()),
+        k.pos(32, y),
+        k.fixed(),
+        "numberOfEntities",
+    ]);
+
+    k.onUpdate(() => {
+        k.get("numberOfEntities")[0].text = "Number of entities: " + k.get("fruit").length.toString();
+    })
+}
+
 export function displayDebugInfo() {
     const debugFunctions = [
         mousePosition,
+        numberOfEntities,
     ];
     let y = 32;
 
