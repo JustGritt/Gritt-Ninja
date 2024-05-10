@@ -28,18 +28,11 @@ function randomSize() {
 }
 
 function fuse(fruit: any) {
-    // Destroy the fruit regardless of its falling state
     fruit.destroy();
+    if (fruit.fallingState) return;
 
-    // If the fruit was in falling state, don't create a new one
-    if (fruit.fallingState) {
-        return;
-    }
-
-    // Create a new fruit
-    let fruitType = randomSprite()
     const fusedFruit = k.add([
-        k.sprite(fruitType),
+        k.sprite(fruit.fruitType),
         k.scale(randomSize()),
         k.pos(fruit.pos.clone()),
         k.anchor("center"),
@@ -48,20 +41,99 @@ function fuse(fruit: any) {
         k.area(),
         k.move(0, Math.random() * 1000 - 500),
         k.offscreen({ destroy: true }),
-        k.state("jumping", ["jumping", "falling", "cutted", "paused"]),
+        k.state("jumping", ["jumping", "falling", "paused"]),
         "fruit",
         {
+            fruitType: fruit.fruitType,
             fallingState: false,
-            fruitType: fruitType,
-            cut: false,
+            sliced: false,
+            // Helpers for pause
+            currentRotation: 0,
+            currentVelocity: 0,
         }
     ]);
 
+    console.log(fusedFruit)
     k.addKaboom(fusedFruit.pos.clone());
     fusedFruit.jump(k.height() / 1.2);
 
     return fusedFruit;
 }
+
+function createFruitSlice(fruit: any, direction: number, verticalSpeed: number) {
+    return k.add([
+        k.sprite(fruit.fruitType),
+        k.scale(randomSize()),
+        k.pos(fruit.pos.clone()),
+        k.anchor("center"),
+        k.rotate(k.rand(0, 360)),
+        k.move(direction, verticalSpeed),
+        k.scale(0.15),
+        k.area(),
+        k.offscreen({ destroy: true }),
+        "fruit",
+        {
+            fruitType: fruit.fruitType,
+            fallingState: false,
+            sliced: true,
+            // Helpers for pause
+            currentRotation: 0,
+            currentVelocity: 0,
+        }
+    ]);
+}
+
+// ==============================
+// Collisions
+// ==============================
+
+function handleFruitCollisions(fruit: any) {
+    fruit.onCollide("fruit", (fruit: any) => {
+        if(!fruit.sliced) fuse(fruit)
+    });
+
+    fruit.onHoverEnd(() => {
+        if(!isPaused && !fruit.sliced) {
+            k.addKaboom(fruit.pos.clone())
+
+            // Get mouse delta to determine the direction of the slice
+            const mouseDelta = k.mouseDeltaPos()
+            if(Math.abs(mouseDelta.x) > Math.abs(mouseDelta.y)) {
+                createFruitSlice(fruit, 1000, 1000);
+                createFruitSlice(fruit, 1000, -1000);
+            } else {
+                createFruitSlice(fruit, 0, 1000);
+                createFruitSlice(fruit, 0, -1000);
+            }
+
+            fruit.destroy()
+        }
+    })
+}
+
+// ==============================
+// States
+// ==============================
+
+function handleFruitStates(fruit: any) {
+    fruit.onUpdate(() => {
+        if(!isPaused) {
+            fruit.angle += k.dt() * 100
+            fruit.onFall(() => {
+                if(fruit.state === "jumping") fruit.enterState("falling")
+            })
+        }
+    })
+
+    fruit.onStateEnter("jumping", () => {
+        fruit.jump(k.height() + 32 + Math.random())
+    })
+
+    fruit.onStateEnter("falling", () => {
+        fruit.fallingState = true
+    })
+}
+
 // ==============================
 // Export
 // ==============================
@@ -83,7 +155,7 @@ export function createFruit() {
         {
             fruitType: fruitType,
             fallingState: false,
-            cut: false,
+            sliced: false,
             // Helpers for pause
             currentRotation: 0,
             currentVelocity: 0,
@@ -91,82 +163,7 @@ export function createFruit() {
     ]);
 
     k.setGravity(1000)
-    fruit.onUpdate(() => {
-        if(!isPaused) {
-            fruit.angle += k.dt() * 100
-            fruit.onFall(() => {
-                if(fruit.state === "jumping")
-                    fruit.enterState("falling")
-            })
-        }
-    })
-
-    // ==============================
-    // States
-    // ==============================
-    fruit.onStateEnter("jumping", () => {
-        fruit.jump(k.height() + 32 + Math.random())
-    })
-
-    fruit.onStateEnter("falling", () => {
-        fruit.fallingState = true
-    })
-
-    // ==============================
-    // Collisions
-    // ==============================
-    fruit.onCollide("fruit", async(fruit) => {
-        if(!fruit.cut)
-            fuse(fruit)
-    });
-
-    fruit.onHoverUpdate(() => {
-        if(isPaused) return;
-
-        if(!fruit.cut) {
-            k.addKaboom(fruit.pos.clone())
-            fruit.destroy()
-
-            // Create a new fruit
-            k.add([
-                k.sprite(fruit.fruitType),
-                k.scale(randomSize()),
-                k.pos(fruit.pos.clone()),
-                k.anchor("center"),
-                k.rotate(k.rand(0, 360)),
-                k.move(-1000, 1000),
-                k.scale(0.15),
-                k.area(),
-                k.offscreen({ destroy: true }),
-                "fruit",
-                {
-                    fallingState: false,
-                    cut: true,
-                }
-            ]);
-
-            k.add([
-                k.sprite(fruit.fruitType),
-                k.scale(randomSize()),
-                k.pos(fruit.pos.clone()),
-                k.anchor("center"),
-                k.rotate(k.rand(0, 360)),
-                k.move(-100, 1000),
-                k.scale(0.15),
-                k.area(),
-                k.offscreen({ destroy: true }),
-                "fruit",
-                {
-                    fallingState: false,
-                    cut: true,
-                }
-            ]);
-
-        }
-
-    })
-
-
-
+    handleFruitStates(fruit)
+    handleFruitCollisions(fruit)
     return fruit;
 }
