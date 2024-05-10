@@ -33,7 +33,7 @@ export function resume() {
     for (let fruit of fruits) {
         fruit.use(k.body({ isStatic: false }))
         fruit.use(k.rotate(fruit.currentRotation))
-        fruit.vel.y = fruit.currentVelocity.y || 0;
+        fruit.vel.y = fruit.currentVelocity ? (fruit.currentVelocity.y || 0) : 0;
     }
 }
 
