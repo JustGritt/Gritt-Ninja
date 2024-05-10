@@ -1,6 +1,4 @@
 import { k } from "../kaboomContext";
-// import { player, PLAYER_SPEED } from "../entities/player";
-
 export let isPaused = false;
 export function pause() {
     isPaused = true;
@@ -12,32 +10,30 @@ export function pause() {
         k.fixed(),
         k.scale(2),
         k.color(255, 0, 0),
+        k.z(10),
         "pause",
     ]);
 
-    // Prevent the player from moving
-    // player.movement_speed = 0;
-
-    // Prevent the enemies from moving
-    const enemies = k.get("enemy");
-    for (let enemy of enemies) {
-        enemy.enterState("pause");
+    // Prevent the fruits from moving
+    const fruits = k.get("fruit");
+    for (let fruit of fruits) {
+        fruit.currentRotation = fruit.angle;
+        fruit.currentVelocity = fruit.vel;
+        fruit.use(k.body({ isStatic: true }))
+        fruit.use(k.rotate(fruit.angle))
+        fruit.use(k.move(0, 0))
     }
 }
 
 export function resume() {
     isPaused = false;
 
-    // Remove the pause text
     k.get("pause").forEach(p => p.destroy());
-
-    // Resume player movement
-    // player.movement_speed = PLAYER_SPEED;
-
-    // Resume the enemies state
-    k.get("enemy").forEach(enemy => {
-        const state = Math.random() > 0.5 ? "idle" : "move";
-        enemy.enterState(state);
-    });
+    const fruits = k.get("fruit");
+    for (let fruit of fruits) {
+        fruit.use(k.body({ isStatic: false }))
+        fruit.use(k.rotate(fruit.currentRotation))
+        fruit.vel.y = fruit.currentVelocity.y || 0;
+    }
 }
 
