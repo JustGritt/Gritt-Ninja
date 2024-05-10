@@ -2,6 +2,8 @@ import { k } from "./kaboomContext";
 import { createMainMenu } from './scenes/mainMenu';
 import { createGame } from './scenes/game';
 
+import { displayDebugInfo } from "./utils/debug";
+
 // ==============================
 // Functions
 // ==============================
@@ -33,7 +35,7 @@ k.scene("game", () => {
     })
 
     // Debug
-    // displayDebugInfo()
+    displayDebugInfo()
 })
 
 // Game over scene

@@ -1,5 +1,11 @@
 import { k } from "../kaboomContext";
 import { createBackground, deleteBackground } from '../utils/background';
+import { createFruit } from '../entities/fruit';
+
+// ==============================
+// Functions
+// ==============================
+
 
 // ==============================
 // Variables
@@ -7,6 +13,11 @@ import { createBackground, deleteBackground } from '../utils/background';
 
 export function createGame() {
     createBackground()
+
+    // Spawn fruits
+    k.loop(1, () => {
+        createFruit()
+    })
 
     // Handle resize
     let resizeTimeout: any;
