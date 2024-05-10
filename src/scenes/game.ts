@@ -2,6 +2,7 @@ import { k } from "../kaboomContext";
 import { createBackground, deleteBackground } from '../utils/background';
 import { createFruit } from '../entities/fruit';
 import { createPlayer, hurt } from '../entities/player';
+import { isPaused, pause, resume } from "../utils/pause";
 
 // ==============================
 // Functions
@@ -18,7 +19,7 @@ export function createGame() {
 
     // Spawn fruits
     k.loop(1, () => {
-        createFruit()
+        if(!isPaused) createFruit()
     })
 
     const floor = k.add([
@@ -45,4 +46,14 @@ export function createGame() {
             createBackground()
         }, 1000);
     });
+
+    k.onUpdate(() => {
+        if (k.isKeyPressed("escape")) {
+            k.go("menu")
+        }
+
+        if (k.isKeyPressed("p")) {
+            isPaused ? resume() : pause()
+        }
+    })
 }

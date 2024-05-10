@@ -3,6 +3,7 @@ import { createMainMenu } from './scenes/mainMenu';
 import { createGame } from './scenes/game';
 import {createGameOver } from './scenes/gameOver';
 
+
 // import { displayDebugInfo } from "./utils/debug";
 
 // ==============================
@@ -29,11 +30,7 @@ k.scene("menu", () => {
 k.scene("game", () => {
     createGame()
 
-    k.onUpdate(() => {
-        if (k.isKeyPressed("escape")) {
-            k.go("menu")
-        }
-    })
+
 
     // Debug
     // displayDebugInfo()
@@ -59,4 +56,4 @@ function start() {
 }
 
 start()
-k.debug.inspect = true
+// k.debug.inspect = true
