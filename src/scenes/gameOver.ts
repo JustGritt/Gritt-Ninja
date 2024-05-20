@@ -6,7 +6,7 @@ import { createBackground, deleteBackground } from '../utils/background';
 // ==============================
 
 export function createGameOver() {
-    createBackground()
+    const background = createBackground()
 
     const title = k.add([
         k.text("Game Over"),

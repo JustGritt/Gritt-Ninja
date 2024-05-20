@@ -1,8 +1,10 @@
 import { k } from "../kaboomContext";
 import { createBackground, deleteBackground } from '../utils/background';
 import { createFruit } from '../entities/fruit';
-import { createPlayer, hurt } from '../entities/player';
+import { createPlayer, updatePlayerLives } from '../entities/player';
 import { isPaused, pause, resume } from "../utils/pause";
+import { createScore, createCombo } from '../utils/score';
+import { createTurtle } from '../entities/turtle';
 
 // ==============================
 // Functions
@@ -16,10 +18,12 @@ import { isPaused, pause, resume } from "../utils/pause";
 export function createGame() {
     createBackground()
     createPlayer()
+    createScore()
+    createCombo()
 
     // Spawn fruits
-    k.loop(1, () => {
-        if(!isPaused) createFruit()
+    k.loop(0.5, () => {
+        if(!isPaused) Math.random() > 1 ? createFruit() : createTurtle()
     })
 
     const floor = k.add([
@@ -32,19 +36,15 @@ export function createGame() {
 
     floor.onCollide("fruit", (fruit) => {
         if(fruit.fallingState) {
-            hurt()
+            updatePlayerLives()
             fruit.destroy()
         }
     });
 
     // Handle resize
-    let resizeTimeout: any;
     k.onResize(() => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            deleteBackground()
-            createBackground()
-        }, 1000);
+        deleteBackground()
+        createBackground()
     });
 
     k.onUpdate(() => {
@@ -56,4 +56,7 @@ export function createGame() {
             isPaused ? resume() : pause()
         }
     })
+
+    k.debug.inspect = true
 }
+

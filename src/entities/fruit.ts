@@ -1,5 +1,6 @@
 import { isPaused } from "../utils/pause";
 import { k } from "../kaboomContext";
+import { updatePlayerLives } from "../entities/player";
 
 // ==============================
 // Variables
@@ -27,7 +28,8 @@ function randomSize() {
     return k.rand(128, 140) / 512
 }
 
-function fuse(fruit: any) {
+function fuseFruits(fruit: any) {
+    let fruitScore = fruit.score;
     fruit.destroy();
     if (fruit.fallingState) return;
 
@@ -44,19 +46,24 @@ function fuse(fruit: any) {
         k.state("jumping", ["jumping", "falling", "paused"]),
         "fruit",
         {
+            // States
             fruitType: fruit.fruitType,
             fallingState: false,
             sliced: false,
+            // Info
+            score: fruitScore * 2,
             // Helpers for pause
             currentRotation: 0,
             currentVelocity: 0,
         }
     ]);
 
-    console.log(fusedFruit)
     k.addKaboom(fusedFruit.pos.clone());
-    fusedFruit.jump(k.height() / 1.2);
+    fusedFruit.jump(k.height() / 1.1);
 
+    k.setGravity(1000)
+    handleFruitStates(fusedFruit)
+    handleFruitCollisions(fusedFruit)
     return fusedFruit;
 }
 
@@ -71,8 +78,9 @@ function createFruitSlice(fruit: any, direction: number, verticalSpeed: number) 
         k.scale(0.15),
         k.area(),
         k.offscreen({ destroy: true }),
-        "fruit",
+        "slice",
         {
+            // States
             fruitType: fruit.fruitType,
             fallingState: false,
             sliced: true,
@@ -88,8 +96,12 @@ function createFruitSlice(fruit: any, direction: number, verticalSpeed: number) 
 // ==============================
 
 function handleFruitCollisions(fruit: any) {
-    fruit.onCollide("fruit", (fruit: any) => {
-        if(!fruit.sliced) fuse(fruit)
+    fruit.onCollide("turtle", (turtle: any) => {
+        if(!fruit.sliced) turtle.destroy()
+    });
+
+    fruit.onCollide("fruit", (collidingFruit: any) => {
+        if(!fruit.sliced) fuseFruits(collidingFruit)
     });
 
     fruit.onHoverEnd(() => {
@@ -106,6 +118,7 @@ function handleFruitCollisions(fruit: any) {
                 createFruitSlice(fruit, 0, -1000);
             }
 
+            updatePlayerLives()
             fruit.destroy()
         }
     })
@@ -153,9 +166,12 @@ export function createFruit() {
         k.state("jumping", ["jumping", "falling", "paused"]),
         "fruit",
         {
+            // States
             fruitType: fruitType,
             fallingState: false,
             sliced: false,
+            // Info
+            score: 100,
             // Helpers for pause
             currentRotation: 0,
             currentVelocity: 0,

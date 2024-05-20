@@ -3,16 +3,42 @@ export let isPaused = false;
 export function pause() {
     isPaused = true;
 
-    k.add([
-        k.text("PAUSED"),
-        k.pos(k.width() / 2, k.height() / 2),
+    // k.add([
+    //     k.rect(k.width(), k.height()),
+    //     k.color(0, 0, 0),
+    //     k.opacity(0.2),
+    //     k.pos(0, 0),
+    //     k.fixed(),
+    //     k.scale(k.width(), k.height()),
+    //     k.z(9),
+    //     "pause"
+    // ])
+
+    const text = k.add([
+        k.text("GAME PAUSED"),
+        k.pos(k.width() / 2, k.height() / 2 - 100),
         k.anchor("center"),
         k.fixed(),
         k.scale(2),
-        k.color(255, 0, 0),
+        k.color(231, 76, 60),
         k.z(10),
         "pause",
     ]);
+
+    const subtext = k.add([
+        k.text("Press [p] to resume"),
+        k.pos(k.width() / 2, k.height() / 2),
+        k.anchor("center"),
+        k.fixed(),
+        k.scale(1.6),
+        k.color(231, 76, 60),
+        k.z(10),
+        "pause",
+    ])
+
+    k.loop(1, () => {
+        subtext.hidden = !subtext.hidden
+    })
 
     // Prevent the fruits from moving
     const fruits = k.get("fruit");
