@@ -25,13 +25,13 @@ function deleteTurtle(turtle: any) {
     turtle.destroy()
     k.addKaboom(turtle.pos.clone())
 
-    return k.add([
+    const turtleded = k.add([
         k.sprite("turtleded"),
         k.scale(randomSize()),
         k.pos(turtle.pos.clone()),
         k.anchor("center"),
         k.rotate(k.rand(0, 360)),
-        k.move(- k.rand(0, 1000) - 50, 2000),
+        k.move(- k.rand(0, 1000) - 50, 1000),
         k.area(),
         k.offscreen({ destroy: true }),
         "slice",
@@ -44,6 +44,11 @@ function deleteTurtle(turtle: any) {
             currentVelocity: 0,
         }
     ])
+
+    k.onUpdate(() => {
+        const rotation = k.lerp(turtleded.angle, turtle.angle, k.dt() * 10)
+        turtleded.angle = rotation
+    })
 }
 
 // ==============================
@@ -112,6 +117,7 @@ export function createTurtle() {
         "turtle",
         {
             // States
+            fruitType: "turtle",
             fallingState: false,
             sliced: false,
             // Helpers for pause

@@ -13,7 +13,7 @@ export function createGameOver() {
     k.add([
         k.rect(k.width(), k.height()),
         k.color(0, 0, 0),
-        k.opacity(0.3),
+        k.opacity(0.7),
         k.pos(k.width() / 2, k.height() / 2),
         k.anchor("center"),
     ])

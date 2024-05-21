@@ -196,7 +196,7 @@ export function createGameOverFruit() {
     const turtleded = k.add([
         k.sprite("turtleded"),
         k.scale(randomSize()),
-        k.pos(randomPosition(), -200),
+        k.pos(randomPosition(), -48),
         k.anchor("center"),
         k.rotate(k.rand(0, 360)),
         k.body({ isStatic: false }),
@@ -206,12 +206,12 @@ export function createGameOverFruit() {
         "turtleded",
     ]);
 
-    k.setGravity(1000)
+    k.setGravity(1000);
 
-    const direction = Math.random()
+    const rotationDirection = Math.random() > 0.5 ? 100 : -100;
     k.onUpdate(() => {
-        direction > 0.5 ? turtleded.angle += 100 * k.dt() : turtleded.angle -= 100 * k.dt()
-    })
+        turtleded.angle += rotationDirection * k.dt();
+    });
 
     return turtleded;
 }

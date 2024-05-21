@@ -18,7 +18,7 @@ export function createGame() {
 
     // Spawn fruits
     k.loop(0.5, () => {
-        if(!isPaused) Math.random() > 0.1 ? createFruit() : createTurtle()
+        if(!isPaused) Math.random() > 0.2 ? createFruit() : createTurtle()
     })
 
     const floor = k.add([
@@ -45,10 +45,6 @@ export function createGame() {
     k.onUpdate(() => {
         if (k.isKeyPressed("escape")) {
             k.go("menu")
-        }
-
-        if (k.isKeyPressed("k")) {
-            k.go("gameOver")
         }
 
         if (k.isKeyPressed("p")) {
