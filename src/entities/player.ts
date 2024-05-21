@@ -28,13 +28,12 @@ export function resetPlayer() {
     player.lifes = 3;
 }
 
-export function updatePlayerLives() {
+export function updatePlayerLives(lives: number) {
     k.shake(60)
-    player.lifes -= 1;
+    player.lifes += lives;
 
     if (player.lifes <= 0) {
-        // k.go("gameOver");
-        player.lifes = 1
+        k.go("gameOver");
     }
 }
 
@@ -42,7 +41,7 @@ function playerHUD() {
     k.add([
         k.text("❤️ ❤️ ❤️"),
         k.color(231, 76, 60),
-        k.pos(32, 64),
+        k.pos(32, 32),
         k.scale(1.2),
         k.fixed(),
         k.z(10),

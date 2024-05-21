@@ -1,12 +1,13 @@
 import { isPaused } from "../utils/pause";
 import { k } from "../kaboomContext";
-import { increaseScore } from "../utils/score";
+import { updatePlayerLives } from "../entities/player";
 
 // ==============================
 // Variables
 // ==============================
 
 k.loadSprite("turtle", "./sprites/turtle.png");
+k.loadSprite("turtleded", "./sprites/turtleded.png");
 
 // ==============================
 // Functions
@@ -20,28 +21,29 @@ function randomSize() {
     return k.rand(128, 140) / 512
 }
 
-function createTurtleSlice(turtle: any, direction: number, verticalSpeed: number) {
+function deleteTurtle(turtle: any) {
+    turtle.destroy()
+    k.addKaboom(turtle.pos.clone())
+
     return k.add([
-        k.sprite(turtle.turtleType),
+        k.sprite("turtleded"),
         k.scale(randomSize()),
         k.pos(turtle.pos.clone()),
         k.anchor("center"),
         k.rotate(k.rand(0, 360)),
-        k.move(direction, verticalSpeed),
-        k.scale(0.15),
+        k.move(- k.rand(0, 1000) - 50, 2000),
         k.area(),
         k.offscreen({ destroy: true }),
         "slice",
         {
             // States
-            turtleType: turtle.turtleType,
             fallingState: false,
             sliced: true,
             // Helpers for pause
             currentRotation: 0,
             currentVelocity: 0,
         }
-    ]);
+    ])
 }
 
 // ==============================
@@ -62,7 +64,8 @@ function handleTurtleCollisions(turtle: any) {
     turtle.onHoverEnd(() => {
         if(!isPaused && !turtle.sliced) {
             k.addKaboom(turtle.pos.clone())
-            turtle.destroy()
+            updatePlayerLives(-1)
+            deleteTurtle(turtle)
         }
     })
 }
@@ -103,7 +106,7 @@ export function createTurtle() {
         k.rotate(k.rand(0, 360)),
         k.body({ isStatic: false }),
         k.area(),
-        k.move(0, Math.random() * 1000 - 500),
+        k.move(0, Math.random() * 1000 - 800),
         k.offscreen({ destroy: true }),
         k.state("jumping", ["jumping", "falling", "paused"]),
         "turtle",
@@ -117,8 +120,8 @@ export function createTurtle() {
         }
     ]);
 
-    k.setGravity(1000)
-    handleTurtleStates(turtle)
-    handleTurtleCollisions(turtle)
+    k.setGravity(1000);
+    handleTurtleStates(turtle);
+    handleTurtleCollisions(turtle);
     return turtle;
 }

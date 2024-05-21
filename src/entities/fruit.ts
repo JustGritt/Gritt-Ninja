@@ -1,6 +1,6 @@
 import { isPaused } from "../utils/pause";
 import { k } from "../kaboomContext";
-import { updatePlayerLives } from "../entities/player";
+import { increaseScore, createCombo, comboActive, increaseComboStreak } from "../utils/score";
 
 // ==============================
 // Variables
@@ -118,7 +118,15 @@ function handleFruitCollisions(fruit: any) {
                 createFruitSlice(fruit, 0, -1000);
             }
 
-            updatePlayerLives()
+            // Handle combo
+            if(comboActive) {
+                increaseComboStreak()
+                increaseScore(fruit.score);
+            } else {
+                createCombo()
+                increaseScore(fruit.score);
+            }
+
             fruit.destroy()
         }
     })
@@ -183,3 +191,28 @@ export function createFruit() {
     handleFruitCollisions(fruit)
     return fruit;
 }
+
+export function createGameOverFruit() {
+    const turtleded = k.add([
+        k.sprite("turtleded"),
+        k.scale(randomSize()),
+        k.pos(randomPosition(), -200),
+        k.anchor("center"),
+        k.rotate(k.rand(0, 360)),
+        k.body({ isStatic: false }),
+        k.area(),
+        k.z(0),
+        k.offscreen({ destroy: true }),
+        "turtleded",
+    ]);
+
+    k.setGravity(1000)
+
+    const direction = Math.random()
+    k.onUpdate(() => {
+        direction > 0.5 ? turtleded.angle += 100 * k.dt() : turtleded.angle -= 100 * k.dt()
+    })
+
+    return turtleded;
+}
+
