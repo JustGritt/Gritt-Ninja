@@ -28,8 +28,9 @@ export function resetPlayer() {
     player.lifes = 3;
 }
 
-export function hurt() {
-    player.lifes -= 1;
+export function updatePlayerLives(lives: number) {
+    k.shake(60)
+    player.lifes += lives;
 
     if (player.lifes <= 0) {
         k.go("gameOver");
@@ -38,14 +39,17 @@ export function hurt() {
 
 function playerHUD() {
     k.add([
-        k.text("Lifes: " + player.lifes),
+        k.text("❤️ ❤️ ❤️"),
+        k.color(231, 76, 60),
         k.pos(32, 32),
+        k.scale(1.2),
         k.fixed(),
+        k.z(10),
         "playerHUD",
     ]);
 
     k.onUpdate(() => {
-        k.get("playerHUD")[0].text = "Lifes: " + player.lifes;
+        k.get("playerHUD")[0].text = "❤️ ".repeat(player.lifes)
     })
 }
 

@@ -51,10 +51,10 @@ npm run dev
 ## Remaining features
 
 - [x] Add different fruits
-- [ ] Add a game over screen
+- [x] Add a game over screen
 - [ ] Add multiple difficulty
-- [ ] Add a score counter
-- [ ] Add a combo system
+- [x] Add a score counter
+- [x] Add a combo system
 - [ ] Add sound effects
 - [ ] Add animations
 - [ ] Add a leaderboard

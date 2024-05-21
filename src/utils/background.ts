@@ -14,9 +14,9 @@ let horizontalSegment = k.height() / BACKGROUND_HORIZONTAL_CUTS;
 
 export function createBackground() {
     k.add([
-        k.rect(k.width(), k.height()),
+        k.rect(k.width() + 100, k.height() + 100),
         k.color(156, 102,68),
-        k.pos(0, 0),
+        k.pos(-50, -50),
         k.z(-1),
         "backgroundColor"
     ])
@@ -42,16 +42,6 @@ export function createBackground() {
             "cut"
         ])
     }
-
-    // Handle resize
-    let resizeTimeout: any;
-    k.onResize(() => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            verticalSegment = k.width() / BACKGROUND_VERTICAL_CUTS;
-            horizontalSegment = k.height() / BACKGROUND_HORIZONTAL_CUTS;
-        }, 1000);
-    });
 }
 
 export function deleteBackground() {

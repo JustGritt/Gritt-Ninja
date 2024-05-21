@@ -2,9 +2,9 @@
 // Map
 // ==============================
 
-export const BACKGROUND_VERTICAL_CUTS = 4;
-export const BACKGROUND_HORIZONTAL_CUTS = 4;
-export const BACKGROUND_CUT_ANGLE = 6;
+export const BACKGROUND_VERTICAL_CUTS = 10;
+export const BACKGROUND_HORIZONTAL_CUTS = 2;
+export const BACKGROUND_CUT_ANGLE = 4;
 
 // ==============================
 // Entities
