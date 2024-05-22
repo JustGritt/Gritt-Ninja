@@ -1,5 +1,5 @@
-import { k } from "../kaboomContext";
 import { BACKGROUND_VERTICAL_CUTS, BACKGROUND_HORIZONTAL_CUTS, BACKGROUND_CUT_ANGLE } from '../utils/contants';
+import { k } from "../kaboomContext";
 
 // ==============================
 // Variables
@@ -52,8 +52,4 @@ export function deleteBackground() {
     k.get("cut").forEach(cut => {
         cut.destroy();
     })
-}
-
-export function setDifficulty(difficulty: number) {
-    console.log(difficulty)
 }

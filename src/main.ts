@@ -1,9 +1,8 @@
 import { k } from "./kaboomContext";
-import { createMainMenu } from './scenes/mainMenu';
+import { createMainMenu, chosenDifficulty } from './scenes/mainMenu';
 import { createGameOver } from './scenes/gameOver';
 import { createGame } from './scenes/game';
 // import { displayDebugInfo } from "./utils/debug";
-
 // ==============================
 // Functions
 // ==============================
@@ -26,7 +25,7 @@ k.scene("menu", () => {
 
 // Game scene
 k.scene("game", () => {
-    createGame()
+    createGame(chosenDifficulty)
 
     // Debug
     // displayDebugInfo()
