@@ -1,6 +1,6 @@
+import { updatePlayerLives } from "../entities/player";
 import { isPaused } from "../utils/pause";
 import { k } from "../kaboomContext";
-import { updatePlayerLives } from "../entities/player";
 
 // ==============================
 // Variables

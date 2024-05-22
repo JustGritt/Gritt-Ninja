@@ -1,7 +1,7 @@
-import { k } from "../kaboomContext";
+import { createGameOverFruit } from '../entities/fruit';
 import { createBackground } from '../utils/background';
 import { score, highScore } from '../utils/score';
-import { createGameOverFruit } from '../entities/fruit';
+import { k } from "../kaboomContext";
 
 // ==============================
 // Functions

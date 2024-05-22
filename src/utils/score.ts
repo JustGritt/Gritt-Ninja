@@ -1,4 +1,5 @@
 import { k } from "../kaboomContext";
+import { isPaused } from "./pause";
 
 // ==============================
 // Handle Score
@@ -83,7 +84,6 @@ function handleComboBar() {
             comboLabel.destroy()
             comboBar.destroy()
 
-            score = 0;
             multiplier = 1;
             comboStreak = 1;
             timeElapsed = 0;
@@ -99,18 +99,20 @@ function startCombo() {
 
     const comboBar = k.get("comboBar")[0];
     const timer = k.loop(0.01, () => {
-        timeElapsed += 10;
-        comboBar.width = k.width() * (1 - timeElapsed / 5000);
+        if (!isPaused) { // Only update if the game is not paused
+            timeElapsed += 10;
+            comboBar.width = k.width() * (1 - timeElapsed / 5000);
 
-        // Update color based on width
-        comboBar.color = comboBar.width > k.width() * 0.5 ? k.rgb(39, 174, 96)
-        : comboBar.width > k.width() * 0.25 ? k.rgb(241, 196, 15)
-        : k.rgb(192, 57, 43);
+            // Update color based on width
+            comboBar.color = comboBar.width > k.width() * 0.5 ? k.rgb(39, 174, 96)
+            : comboBar.width > k.width() * 0.25 ? k.rgb(241, 196, 15)
+            : k.rgb(192, 57, 43);
+        }
 
-        // Reset the combo
-        if (comboActive && comboBar.width <= 0) {
-            timeElapsed = 0
-            timer.cancel()
+        // Reset the combo if the bar width reaches zero and the game is not paused
+        if (comboActive && comboBar.width <= 0 && !isPaused) {
+            timeElapsed = 0;
+            timer.cancel();
         }
     });
 }

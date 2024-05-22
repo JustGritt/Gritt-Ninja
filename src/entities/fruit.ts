@@ -1,6 +1,6 @@
+import { increaseScore, createCombo, comboActive, increaseComboStreak } from "../utils/score";
 import { isPaused } from "../utils/pause";
 import { k } from "../kaboomContext";
-import { increaseScore, createCombo, comboActive, increaseComboStreak } from "../utils/score";
 
 // ==============================
 // Variables

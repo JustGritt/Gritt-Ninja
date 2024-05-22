@@ -1,9 +1,15 @@
-import { k } from "../kaboomContext";
 import { createBackground, deleteBackground } from '../utils/background';
+import { k } from "../kaboomContext";
+
+export let chosenDifficulty = "Easy"
 
 // ==============================
 // Functions
 // ==============================
+
+function setDifficulty(difficulty: string) {
+    chosenDifficulty = difficulty
+}
 
 export function createMainMenu() {
     createBackground()
@@ -16,8 +22,8 @@ export function createMainMenu() {
     ])
 
     const difficultyText = k.add([
-        k.text("<- Choose difficulty ->"),
-        k.pos(k.width() / 2, k.height() /2 + 100),
+        k.text("<- Choose difficulty with arrow keys ->"),
+        k.pos(k.width() / 2, k.height() / 2 + 100),
         k.anchor("center"),
     ])
 
@@ -28,23 +34,25 @@ export function createMainMenu() {
     ])
 
     // Choose difficulty mode
-    const difficulties = ["Easy", "Normal", "Hard", "Lights Out", "VHS"]
+    const difficulties = ["Easy", "Normal", "Hard"]
     let difficultyIndex = 0
     const difficultyLabel = k.add([
         k.text(difficulties[difficultyIndex]),
         k.pos(k.width() / 2, k.height() / 2),
-        k.scale(1.2),
+        k.scale(1.5),
         k.anchor("center"),
     ])
 
     k.onKeyPress("left", () => {
         difficultyIndex = Math.max(0, difficultyIndex - 1)
         difficultyLabel.text = difficulties[difficultyIndex]
+        setDifficulty(difficulties[difficultyIndex])
     })
 
     k.onKeyPress("right", () => {
         difficultyIndex = Math.min(difficulties.length - 1, difficultyIndex + 1)
         difficultyLabel.text = difficulties[difficultyIndex]
+        setDifficulty(difficulties[difficultyIndex])
     })
 
     k.loop(0.7, () => {
